@@ -1,0 +1,107 @@
+<html>
+    <body>
+<script>
+let options = ["rock", "paper", "scissors"]
+let playerSelection = "RoCk"
+
+let playerScore = 0
+let computerScore = 0
+let tieScore = 0
+
+let result
+let finalMessage
+let bestOfFiveResult
+
+function computerPlay() {
+        let selection = options[Math.floor(Math.random()*options.length)];
+        return selection;
+    }
+
+
+
+function capitalise(word) {
+    word = word[0].toUpperCase() + word.toLowerCase().slice(1)
+    return word;
+}
+
+function playRound(computerSelection, playerSelection) {
+    if (computerSelection == playerSelection) {
+        result = "It's a tie!";
+    } else if (computerSelection == "rock") {
+        switch(true) {
+            case playerSelection == "scissors":
+            result = `You lose! ${capitalise(computerSelection)} smashes ${playerSelection}!`
+            break;
+            case playerSelection == "paper":
+            result =  `You win! ${capitalise(playerSelection)} smothers ${computerSelection}!`
+            break;};
+    } else if (computerSelection == "scissors") {
+        switch(true) {
+            case playerSelection == "paper":
+            result = `You lose! ${capitalise(computerSelection)} cuts ${playerSelection}!`
+            break;
+            case playerSelection == "rock":
+            result =  `You win! ${capitalise(playerSelection)} smashes ${computerSelection}!`
+            break;};
+    } else if (computerSelection == "paper") {
+        switch(true) {
+            case playerSelection == "rock":
+            result = `You lose! ${capitalise(computerSelection)} smothers ${playerSelection}!`
+            break;
+            case playerSelection == "scissors":
+            result =  `You win! ${capitalise(playerSelection)} cuts ${computerSelection}!`
+            break;};
+    } else {
+        result = "Oops something went wrong";
+    } 
+    return result }
+
+
+
+function game() {
+    for (gameNumber = 1; gameNumber < 6; gameNumber++) {
+        playerSelection = window.prompt("Rock, paper, or scissors?","");
+        playerSelection = playerSelection.toLowerCase();
+        let computerSelection = computerPlay();
+        playRound(computerSelection, playerSelection);
+        if (result.search("win") != -1) {
+         ++playerScore 
+        } else if (result.search("tie") != -1) {
+          ++tieScore 
+        } else {
+           ++computerScore
+        }
+        console.log(`Game number ${gameNumber} of 5`);
+        console.log(playRound(computerSelection, playerSelection));
+        console.log(`Player score: ${playerScore}`);
+        console.log(`Computer score: ${computerScore}`);
+        console.log(`Tied games: ${tieScore}`);
+        console.log("");
+    } 
+    return
+}
+
+
+function displayResult() {
+    if (playerScore === computerScore) {
+        bestOfFiveResult = "It's a tie!"
+    } else if (playerScore > computerScore) {
+        bestOfFiveResult = "You win!"
+    } else {
+        bestOfFiveResult = "Computer wins!"
+    }
+    return bestOfFiveResult
+}
+
+game();
+finalMessage = `End of Game! 
+        Your Score: ${playerScore}
+        Computer Score: ${computerScore}`
+        
+console.log(finalMessage)
+console.log(displayResult());
+
+    
+    </script>
+    </body>
+</html>
