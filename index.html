@@ -1,28 +1,29 @@
 <html>
     <body>
 <script>
-let options = ["rock", "paper", "scissors"]
 
+/// Definition of variables, starting values, and valid options
+let options = ["rock", "paper", "scissors"]
 let playerScore = 0
 let computerScore = 0
 let tieScore = 0
-
 let result
-let finalMessage
+let finalScore
 let bestOfFiveResult
 
+/// Function so the computer selects a random option from the options array
 function computerPlay() {
         let selection = options[Math.floor(Math.random()*options.length)];
         return selection;
     }
 
-
-
+/// Function to capitalise the first letter of options when displaying results
 function capitalise(word) {
     word = word[0].toUpperCase() + word.toLowerCase().slice(1)
     return word;
 }
 
+/// Function to define the round results and message
 function playRound(computerSelection, playerSelection) {
     if (computerSelection == playerSelection) {
         result = "It's a tie!";
@@ -55,22 +56,42 @@ function playRound(computerSelection, playerSelection) {
     } 
     return result }
 
+/// Function to display the final result
+function displayResult() {
+    if (playerScore === computerScore) {
+        bestOfFiveResult = "It's a tie!"
+    } else if (playerScore > computerScore) {
+        bestOfFiveResult = "You win!"
+    } else {
+        bestOfFiveResult = "Computer wins!"
+    }
+    return bestOfFiveResult
+}
 
 
+/// Function to execute 5 rounds and display the final result: a complete best-of-5 game
 function game() {
     for (gameNumber = 1; gameNumber < 6; gameNumber++) {
         playerSelection = window.prompt("Rock, paper, or scissors?");
-        playerSelection = playerSelection.toLowerCase();
+
+    /// Cancel the game if user escapes out or presses cancel... what a quitter.
+    if (playerSelection === null) {
+        console.log("Game cancelled. YOU LOSE!")
+        break
+    } else {
+    
+    ///Start check to see if playerSelection is in the array of options
     for (validEntry = 0; validEntry < 1;) {
-        if (playerSelection === "rock" || playerSelection === "paper" || playerSelection === "scissors") {
+        playerSelection = playerSelection.toLowerCase();
+        if (options.indexOf(playerSelection) != -1) { 
             validEntry++
         } else {
         validEntry = 0
         playerSelection = window.prompt("Invalid entry: Rock, paper, or scissors?");
-        playerSelection = playerSelection.toLowerCase();
     }}
 
-        playerSelection = playerSelection.toLowerCase();
+    ///End check to see if playerSelection is valid
+
         let computerSelection = computerPlay();
         playRound(computerSelection, playerSelection);
         if (result.search("win") != -1) {
@@ -84,31 +105,25 @@ function game() {
         console.log(playRound(computerSelection, playerSelection));
         console.log(`Player score: ${playerScore}`);
         console.log(`Computer score: ${computerScore}`);
-        console.log(`Tied games: ${tieScore}`);
+        console.log(`Tied rounds: ${tieScore}`);
         console.log("");
     } 
+
+    ///Display final score
+    finalScore = `End of Game! 
+        Your Score: ${playerScore}
+        Computer Score: ${computerScore}
+        Tied Rounds: ${tieScore}`    
+    console.log(finalScore)
+    console.log(displayResult());
+    }
     return
 }
 
-
-function displayResult() {
-    if (playerScore === computerScore) {
-        bestOfFiveResult = "It's a tie!"
-    } else if (playerScore > computerScore) {
-        bestOfFiveResult = "You win!"
-    } else {
-        bestOfFiveResult = "Computer wins!"
-    }
-    return bestOfFiveResult
-}
+/// Run the game
 
 game();
-finalMessage = `End of Game! 
-        Your Score: ${playerScore}
-        Computer Score: ${computerScore}`
-        
-console.log(finalMessage)
-console.log(displayResult());
+
 
     
     </script>
