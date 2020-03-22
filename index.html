@@ -2,7 +2,6 @@
     <body>
 <script>
 let options = ["rock", "paper", "scissors"]
-let playerSelection = "RoCk"
 
 let playerScore = 0
 let computerScore = 0
@@ -60,7 +59,17 @@ function playRound(computerSelection, playerSelection) {
 
 function game() {
     for (gameNumber = 1; gameNumber < 6; gameNumber++) {
-        playerSelection = window.prompt("Rock, paper, or scissors?","");
+        playerSelection = window.prompt("Rock, paper, or scissors?");
+        playerSelection = playerSelection.toLowerCase();
+    for (validEntry = 0; validEntry < 1;) {
+        if (playerSelection === "rock" || playerSelection === "paper" || playerSelection === "scissors") {
+            validEntry++
+        } else {
+        validEntry = 0
+        playerSelection = window.prompt("Invalid entry: Rock, paper, or scissors?");
+        playerSelection = playerSelection.toLowerCase();
+    }}
+
         playerSelection = playerSelection.toLowerCase();
         let computerSelection = computerPlay();
         playRound(computerSelection, playerSelection);
