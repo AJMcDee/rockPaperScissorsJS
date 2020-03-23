@@ -19,6 +19,7 @@ let tieScore = 0
 let result
 let finalScore
 let bestOfFiveResult
+let cancelledGame = false;
 
 /// Function so the computer selects a random option from the options array
 function computerPlay() {
@@ -67,13 +68,17 @@ function playRound(computerSelection, playerSelection) {
 
 /// Function to display the final result
 function displayResult() {
+    let resultMessage
+    let baseMessage = "GAME OVER!"
     if (playerScore === computerScore) {
-        bestOfFiveResult = "It's a tie!"
+        resultMessage = "It's a tie!"
     } else if (playerScore > computerScore) {
-        bestOfFiveResult = "You win!"
+        resultMessage = "You win!"
     } else {
-        bestOfFiveResult = "Computer wins!"
+        resultMessage = "Computer wins!"
     }
+
+    bestOfFiveResult = `${baseMessage} ${resultMessage}`
     return bestOfFiveResult
 }
 
@@ -82,59 +87,67 @@ function displayResult() {
 function game() {
     for (gameNumber = 1; gameNumber < 6; gameNumber++) {
         playerSelection = window.prompt("Rock, paper, or scissors?");
+        
 
-    /// Cancel the game if user escapes out or presses cancel... what a quitter.
-    if (playerSelection === null) {
-        console.log("Game cancelled. YOU LOSE!")
-        break
-    } else {
-    
-    ///Start check to see if playerSelection is in the array of options
-    for (validEntry = 0; validEntry < 1;) {
-        playerSelection = playerSelection.toLowerCase();
-        if (options.indexOf(playerSelection) != -1) { 
-            validEntry++
-        } else {
-        validEntry = 0
-        playerSelection = window.prompt("Invalid entry: Rock, paper, or scissors?");
-    }}
+            for (validEntry = 0; validEntry < 1;) {
+                if (validEntry < 1) {
+                    if (playerSelection === null) {
+                        cancelledGame = true;
+                        break
+                    } else if (options.indexOf(playerSelection.toLowerCase()) != -1) { 
+                        validEntry++
+                        playerSelection = playerSelection.toLowerCase();
+                    } else {
+                        validEntry = 0
+                        playerSelection = window.prompt("Invalid entry: Rock, paper, or scissors?");
+                    }
+                }
+            }
+        if (playerSelection === null) {
+                cancelledGame = true;
+                break
+                return
+        }
 
     ///End check to see if playerSelection is valid
 
-        let computerSelection = computerPlay();
-        playRound(computerSelection, playerSelection);
-        if (result.search("win") != -1) {
+    let computerSelection = computerPlay();
+    playRound(computerSelection, playerSelection);
+        
+    if (result.search("win") != -1) {
          ++playerScore 
-        } else if (result.search("tie") != -1) {
+    } else if (result.search("tie") != -1) {
           ++tieScore 
-        } else {
+    } else {
            ++computerScore
-        }
-        console.log(`Game number ${gameNumber} of 5`);
-        console.log(playRound(computerSelection, playerSelection));
-        console.log(`Player score: ${playerScore}`);
-        console.log(`Computer score: ${computerScore}`);
-        console.log(`Tied rounds: ${tieScore}`);
-        console.log("");
-    } 
-
-    ///Display final score
-    finalScore = `End of Game! 
-        Your Score: ${playerScore}
-        Computer Score: ${computerScore}
-        Tied Rounds: ${tieScore}`    
-    console.log(finalScore)
-    console.log(displayResult());
     }
-    return
+
+    console.log(`Game number ${gameNumber} of 5`);
+    console.log(playRound(computerSelection, playerSelection));
+    console.log(`Player score: ${playerScore}`);
+    console.log(`Computer score: ${computerScore}`);
+    console.log(`Tied rounds: ${tieScore}`);
+    console.log("");
+    }
+    finalScore = `
+    Your Score: ${playerScore}
+    Computer Score: ${computerScore}
+    Tied Rounds: ${tieScore}`
+return
 }
 
 /// Run the game
 
 game();
 
+/// Display final score
+
+(cancelledGame === false) ? console.log(displayResult()): 
+    console.log("Game cancelled: YOU LOSE");
+console.log(finalScore);
+
 
     
-    </script>
-    </body>
+</script>
+</body>
 </html>
