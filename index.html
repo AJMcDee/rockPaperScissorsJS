@@ -6,7 +6,7 @@
 /// as part of The Odin Project curriculum Web Development 101
 ///
 /// First iteration: Saturday 21 March 2020
-/// Last Edited: Sunday 22 March 2020
+/// Last Edited: Tuesday 24 March 2020
 ///
 /// Twitter @AnnaJMcDougall
 
@@ -85,7 +85,7 @@ function displayResult() {
 
 /// Function to execute 5 rounds and display the final result: a complete best-of-5 game
 function game() {
-    for (gameNumber = 1; gameNumber < 6; gameNumber++) {
+    run5: for (gameNumber = 1; gameNumber < 6; gameNumber++) {
         playerSelection = window.prompt("Rock, paper, or scissors?");
         
 
@@ -105,8 +105,7 @@ function game() {
             }
         if (playerSelection === null) {
                 cancelledGame = true;
-                break
-                return
+                break run5;
         }
 
     ///End check to see if playerSelection is valid
