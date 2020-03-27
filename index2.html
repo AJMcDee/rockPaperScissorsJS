@@ -1,0 +1,167 @@
+
+<html><head><title>Rock Paper Scissors</title></head>
+<body>
+<h1>Let's Play!</h1>
+<div class="playerOptions">
+    <button id="rock">Rock</button>
+    <button id="paper">Paper</button>
+    <button id="scissors">Scissors</button>
+</div>
+
+<div id="roundResults">
+    <p id="roundResult"><p>
+    <p id="actionOfWinner"><p>
+    <p id="playerScore"><p>
+    <p id="computerScore"><p>
+</div>
+<div id="finalResults">
+    <p id="gameOver"></p>
+</div>
+
+<script>
+/// Rock-Paper-Scissors console game created by Anna J McDougall
+/// as part of The Odin Project curriculum Web Development 101
+///
+/// First iteration: Saturday 21 March 2020
+/// Last Edited: Tuesday 24 March 2020
+///
+/// Twitter @AnnaJMcDougall
+
+
+/// Definition of variables, starting values, and valid options
+let options = ["rock", "paper", "scissors"]
+let playerScore = 0
+let computerScore = 0
+let tieScore = 0
+let result
+let finalScore
+let bestOfFiveResult
+let cancelledGame = false;
+let playerSelection
+let computerSelection
+let totalRoundCount = 0;
+
+/// DOM elements
+const roundResults = document.querySelector('#roundResults');
+const finalResults = document.querySelector('#finalResults');
+const para = document.createElement('p');
+
+
+
+/// Function so the computer selects a random option from the options array
+function computerPlay() {
+        let selection = options[Math.floor(Math.random()*options.length)];
+        return selection;
+    }
+
+/// Function to capitalise the first letter of options when displaying results
+function capitalise(word) {
+    word = word[0].toUpperCase() + word.toLowerCase().slice(1)
+    return word;
+}
+
+/// Function to define the round results and message
+function playRound(computerSelection, playerSelection) {
+
+    if (computerSelection == playerSelection) {
+        result = "It's a tie!";
+    } else if (computerSelection == "rock") {
+        switch(true) {
+            case playerSelection == "scissors":
+            result = `You lose! ${capitalise(computerSelection)} smashes ${playerSelection}!`
+            break;
+            case playerSelection == "paper":
+            result =  `You win! ${capitalise(playerSelection)} smothers ${computerSelection}!`
+            break;};
+    } else if (computerSelection == "scissors") {
+        switch(true) {
+            case playerSelection == "paper":
+            result = `You lose! ${capitalise(computerSelection)} cuts ${playerSelection}!`
+            break;
+            case playerSelection == "rock":
+            result =  `You win! ${capitalise(playerSelection)} smashes ${computerSelection}!`
+            break;};
+    } else if (computerSelection == "paper") {
+        switch(true) {
+            case playerSelection == "rock":
+            result = `You lose! ${capitalise(computerSelection)} smothers ${playerSelection}!`
+            break;
+            case playerSelection == "scissors":
+            result =  `You win! ${capitalise(playerSelection)} cuts ${computerSelection}!`
+            break;};
+    } else {
+        result = "Oops something went wrong";
+    } 
+    return result }
+    
+function updateResults() {
+    if (totalRoundCount < 5) {
+    totalRoundCount++
+
+    if (result.search("win") != -1) {
+            ++playerScore 
+    } else if (result.search("tie") != -1) {
+        ++tieScore 
+    } else {
+        ++computerScore
+    }
+
+    para.textContent = `${result}
+    Player score: ${playerScore}
+    Computer score: ${computerScore}
+    Tied rounds: ${tieScore}`
+    roundResults.appendChild(para); 
+
+    } else if (totalRoundCount === 5) {{
+        finalScore = `GAME OVER
+        Your Score: ${playerScore}
+        Computer Score: ${computerScore}
+        Tied Rounds: ${tieScore}`
+        let resultMessage
+    
+        if (playerScore === computerScore) {
+            resultMessage = "It's a tie!"
+        } else if (playerScore > computerScore) {
+            resultMessage = "You win!"
+        } else {
+            resultMessage = "Computer wins!"
+    }
+        const finalScoreDisplay = document.getElementById("gameOver")
+        finalScoreDisplay.textContent = `${finalScore} ${resultMessage}`;
+        finalResults.appendChild(finalScoreDisplay);
+    }
+}
+}
+
+
+
+/// Function to display the final result
+function displayResult() {
+
+
+    bestOfFiveResult = `${baseMessage} ${resultMessage}`
+    return bestOfFiveResult
+}
+
+const buttons = document.querySelectorAll("button");
+    buttons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+        playerSelection = button.id;
+        computerSelection = computerPlay();
+        playRound(playerSelection, computerSelection);
+        updateResults();
+        })
+    });
+
+
+
+
+
+
+
+
+
+    
+</script>
+</body>
+</html>
