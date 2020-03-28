@@ -18,6 +18,21 @@ table {
 .runningScore {
     font-size: 45px;
 }
+
+#roundResults {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: center;
+    height: 260px;
+}
+
+#roundResults div {
+    width: 20%;
+    flex-basis: 20%;
+    border: 1px black solid;
+}
 </style>
 
 </head>
@@ -37,7 +52,7 @@ table {
         <tr align="center"><td><p class="runningScore" id="runningPlayerScore">0</p><td><p class="runningScore" id="runningComputerScore">0</p></tr>
     </table>
 </div>
-
+<br>
 
 <div id="roundResults">
 </div>
