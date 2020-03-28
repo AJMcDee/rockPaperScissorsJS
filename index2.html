@@ -44,7 +44,7 @@ let totalRoundCount = 0;
 /// DOM elements
 const roundResults = document.querySelector('#roundResults');
 const finalResults = document.querySelector('#finalResults');
-const para = document.createElement('p');
+
 
 
 
@@ -96,7 +96,7 @@ function playRound(computerSelection, playerSelection) {
     
 function updateResults() {
     if (totalRoundCount < 5) {
-    totalRoundCount++
+    ++totalRoundCount
 
     if (result.search("win") != -1) {
             ++playerScore 
@@ -105,32 +105,37 @@ function updateResults() {
     } else {
         ++computerScore
     }
+   
+    const newID = "round" + totalRoundCount + "Results";
+    const para = document.createElement('p');
 
+    para.setAttribute("id", newID);
     para.textContent = `${result}
     Player score: ${playerScore}
     Computer score: ${computerScore}
     Tied rounds: ${tieScore}`
     roundResults.appendChild(para); 
 
-    } else if (totalRoundCount === 5) {{
-        finalScore = `GAME OVER
-        Your Score: ${playerScore}
-        Computer Score: ${computerScore}
-        Tied Rounds: ${tieScore}`
-        let resultMessage
-    
-        if (playerScore === computerScore) {
-            resultMessage = "It's a tie!"
-        } else if (playerScore > computerScore) {
-            resultMessage = "You win!"
-        } else {
-            resultMessage = "Computer wins!"
-    }
-        const finalScoreDisplay = document.getElementById("gameOver")
-        finalScoreDisplay.textContent = `${finalScore} ${resultMessage}`;
-        finalResults.appendChild(finalScoreDisplay);
+        if (totalRoundCount === 5 || playerScore === 3 || computerScore === 3) {{
+            finalScore = `GAME OVER
+            Your Score: ${playerScore}
+            Computer Score: ${computerScore}
+            Tied Rounds: ${tieScore}`
+            let resultMessage
+        
+            if (playerScore === computerScore) {
+                resultMessage = "It's a tie!"
+            } else if (playerScore > computerScore) {
+                resultMessage = "You win!"
+            } else {
+                resultMessage = "Computer wins!"
+        }
+            const finalScoreDisplay = document.getElementById("gameOver")
+            finalScoreDisplay.textContent = `${finalScore} ${resultMessage}`;
+            finalResults.appendChild(finalScoreDisplay);
     }
 }
+    } 
 }
 
 
@@ -148,7 +153,7 @@ const buttons = document.querySelectorAll("button");
     button.addEventListener('click', (e) => {
         playerSelection = button.id;
         computerSelection = computerPlay();
-        playRound(playerSelection, computerSelection);
+        playRound(computerSelection, playerSelection)
         updateResults();
         })
     });
