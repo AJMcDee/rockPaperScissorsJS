@@ -1,12 +1,80 @@
 
-<html>
-<body>
+<html><head><title>Rock Paper Scissors</title>
+
+<style>
+body {
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+table {
+    display: inline-block;
+}
+
+.choiceImages img{
+    height: 250px;
+    width: 230px;
+}
+
+.runningScore {
+    font-size: 45px;
+}
+
+#roundResults {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: center;
+    height: 260px;
+    width: 80%;
+}
+
+#roundResults div {
+    width: 20%;
+    border: 1px black solid;
+}
+
+@keyframes gameOver {
+    from {color: white}
+    to {color: black}
+}
+
+#gameOver {
+    animation-duration: 2s;
+    animation-name: gameOver;
+}
+
+
+</style>
+
+</head>
+<body><center>
+<h1>Let's Play!</h1>
+<div id="buttonContainer">
+    <button id="paper" >Paper</button>
+    <button id="scissors" >Scissors</button>
+    <button id="rock" >Rock</button>
+</div>
+<div id="finalResults">
+    <p id="gameOver"></p>
+</div>
+    <table class="choiceImages">
+        <tr align="center"><td><h3>You Choose</h3><td><h3>Computer Chooses</h3></tr>
+        <tr align="center"><td><img id="playerChoice"><td><img id="computerChoice"></tr>
+        <tr align="center"><td><p class="runningScore" id="runningPlayerScore">0</p><td><p class="runningScore" id="runningComputerScore">0</p></tr>
+    </table>
+<br>
+
+<div id="roundResults">
+</div>
+
+</center>
 <script>
-/// Rock-Paper-Scissors console game created by Anna J McDougall
+/// Rock-Paper-Scissors game created by Anna J McDougall
 /// as part of The Odin Project curriculum Web Development 101
 ///
 /// First iteration: Saturday 21 March 2020
-/// Last Edited: Tuesday 24 March 2020
+/// Last Edited: Saturday 28 March 2020
 ///
 /// Twitter @AnnaJMcDougall
 
@@ -17,9 +85,16 @@ let playerScore = 0
 let computerScore = 0
 let tieScore = 0
 let result
-let finalScore
-let bestOfFiveResult
-let cancelledGame = false;
+let playerSelection
+let computerSelection
+let totalRoundCount = 0;
+
+/// DOM elements
+const roundResults = document.querySelector('#roundResults');
+const finalResults = document.querySelector('#finalResults');
+const buttons = document.querySelectorAll("button");
+
+
 
 /// Function so the computer selects a random option from the options array
 function computerPlay() {
@@ -35,115 +110,118 @@ function capitalise(word) {
 
 /// Function to define the round results and message
 function playRound(computerSelection, playerSelection) {
+    if (computerSelection == "rock") document.getElementById("computerChoice").src = "images/rock.jpg"
+    if (computerSelection == "scissors") document.getElementById("computerChoice").src = "images/scissors.jpg"
+    if (computerSelection == "paper") document.getElementById("computerChoice").src = "images/paper.jpg"
+    if (playerSelection == "rock") document.getElementById("playerChoice").src = "images/rock.jpg"
+    if (playerSelection == "scissors") document.getElementById("playerChoice").src = "images/scissors.jpg"
+    if (playerSelection == "paper") document.getElementById("playerChoice").src = "images/paper.jpg"
+
     if (computerSelection == playerSelection) {
         result = "It's a tie!";
     } else if (computerSelection == "rock") {
         switch(true) {
             case playerSelection == "scissors":
-            result = `You lose! ${capitalise(computerSelection)} smashes ${playerSelection}!`
+            result = `You lose! 
+                ${capitalise(computerSelection)} smashes ${playerSelection}!`
             break;
             case playerSelection == "paper":
-            result =  `You win! ${capitalise(playerSelection)} smothers ${computerSelection}!`
+            result =  `You win! 
+                ${capitalise(playerSelection)} smothers ${computerSelection}!`
             break;};
     } else if (computerSelection == "scissors") {
         switch(true) {
             case playerSelection == "paper":
-            result = `You lose! ${capitalise(computerSelection)} cuts ${playerSelection}!`
+            result = `You lose! 
+                ${capitalise(computerSelection)} cut ${playerSelection}!`
             break;
             case playerSelection == "rock":
-            result =  `You win! ${capitalise(playerSelection)} smashes ${computerSelection}!`
+            result =  `You win! 
+                ${capitalise(playerSelection)} smashes ${computerSelection}!`
             break;};
     } else if (computerSelection == "paper") {
         switch(true) {
             case playerSelection == "rock":
-            result = `You lose! ${capitalise(computerSelection)} smothers ${playerSelection}!`
+            result = `You lose! 
+                ${capitalise(computerSelection)} smothers ${playerSelection}!`
             break;
             case playerSelection == "scissors":
-            result =  `You win! ${capitalise(playerSelection)} cuts ${computerSelection}!`
+            result =  `You win! 
+                ${capitalise(playerSelection)} cut ${computerSelection}!`
             break;};
     } else {
         result = "Oops something went wrong";
     } 
     return result }
 
-/// Function to display the final result
-function displayResult() {
-    let resultMessage
-    let baseMessage = "GAME OVER!"
-    if (playerScore === computerScore) {
-        resultMessage = "It's a tie!"
-    } else if (playerScore > computerScore) {
-        resultMessage = "You win!"
-    } else {
-        resultMessage = "Computer wins!"
-    }
+function updateResults() {
+    if (totalRoundCount < 5) {
+        ++totalRoundCount
+        const newID = "round" + totalRoundCount + "Results";
+        const div = document.createElement('div');
+        div.setAttribute("id", newID);
 
-    bestOfFiveResult = `${baseMessage} ${resultMessage}`
-    return bestOfFiveResult
-}
-
-
-/// Function to execute 5 rounds and display the final result: a complete best-of-5 game
-function game() {
-    run5: for (gameNumber = 1; gameNumber < 6; gameNumber++) {
-        playerSelection = window.prompt("Rock, paper, or scissors?");
-        
-
-            for (validEntry = 0; validEntry < 1;) {
-                if (validEntry < 1) {
-                    if (playerSelection === null) {
-                        cancelledGame = true;
-                        break
-                    } else if (options.indexOf(playerSelection.toLowerCase()) != -1) { 
-                        validEntry++
-                        playerSelection = playerSelection.toLowerCase();
-                    } else {
-                        validEntry = 0
-                        playerSelection = window.prompt("Invalid entry: Rock, paper, or scissors?");
-                    }
-                }
-            }
-        if (playerSelection === null) {
-                cancelledGame = true;
-                break run5;
+        if (result.search("win") != -1) {
+            ++playerScore 
+            div.setAttribute("style", "background-color: mediumseagreen")
+        } else if (result.search("tie") != -1) {
+            ++tieScore 
+            div.setAttribute("style", "background-color: burlywood")
+        } else {
+            ++computerScore
+            div.setAttribute("style", "background-color: crimson")
         }
 
-    ///End check to see if playerSelection is valid
+        document.getElementById("runningPlayerScore").textContent = playerScore;
+        document.getElementById("runningComputerScore").textContent = computerScore;
 
-    let computerSelection = computerPlay();
-    playRound(computerSelection, playerSelection);
-        
-    if (result.search("win") != -1) {
-         ++playerScore 
-    } else if (result.search("tie") != -1) {
-          ++tieScore 
-    } else {
-           ++computerScore
-    }
 
-    console.log(`Game number ${gameNumber} of 5`);
-    console.log(playRound(computerSelection, playerSelection));
-    console.log(`Player score: ${playerScore}`);
-    console.log(`Computer score: ${computerScore}`);
-    console.log(`Tied rounds: ${tieScore}`);
-    console.log("");
-    }
-    finalScore = `
-    Your Score: ${playerScore}
-    Computer Score: ${computerScore}
-    Tied Rounds: ${tieScore}`
-return
+        div.innerHTML = `<h2>ROUND ${totalRoundCount}</h2>
+            ${result}<br>
+            Player score: ${playerScore}<br>
+            Computer score: ${computerScore}<br>
+            Tied rounds: ${tieScore}<br>` 
+        roundResults.appendChild(div); 
+
+            if (totalRoundCount === 5 || playerScore === 3 || computerScore === 3) {
+                let resultMessage
+            
+                if (playerScore === computerScore) {
+                    resultMessage = "It's a tie!"
+                } else if (playerScore > computerScore) {
+                    resultMessage = "You win!"
+                } else {
+                    resultMessage = "Computer wins!"
+                }
+                const finalScoreDisplay = document.getElementById("gameOver")
+                finalScoreDisplay.innerHTML = `<h1>GAME OVER</h1> ${resultMessage}`;
+                finalResults.appendChild(finalScoreDisplay);
+
+                document.getElementById("buttonContainer").style.display="none";
+
+            }
+    } 
 }
 
-/// Run the game
 
-game();
 
-/// Display final score
+/// Defines button onclick events
 
-(cancelledGame === false) ? console.log(displayResult()): 
-    console.log("Game cancelled: YOU LOSE");
-console.log(finalScore);
+buttons.forEach((button) => {
+button.addEventListener('click', (e) => {
+    playerSelection = button.id;
+    computerSelection = computerPlay();
+    playRound(computerSelection, playerSelection)
+    updateResults();
+    })
+});
+
+
+
+
+
+
+
 
 
     
