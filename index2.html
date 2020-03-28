@@ -1,23 +1,41 @@
 
-<html><head><title>Rock Paper Scissors</title></head>
-<body>
-<h1>Let's Play!</h1>
-<div class="playerOptions">
-    <button id="rock">Rock</button>
-    <button id="paper">Paper</button>
-    <button id="scissors">Scissors</button>
-</div>
+<html><head><title>Rock Paper Scissors</title>
 
-<div id="roundResults">
-    <p id="roundResult"><p>
-    <p id="actionOfWinner"><p>
-    <p id="playerScore"><p>
-    <p id="computerScore"><p>
+<style>
+
+.choiceImages {
+    border: 1px black;
+    height: 300px;
+}
+
+.choiceImages img{
+    max-height: 300px;
+    width: auto;
+}
+
+</style>
+
+</head>
+<body><center>
+<h1>Let's Play!</h1>
+<div class="playerOptions playerButtons" id="buttonContainer">
+    <button id="paper" >Paper</button>
+    <button id="scissors" >Scissors</button>
+    <button id="rock" >Rock</button>
 </div>
 <div id="finalResults">
     <p id="gameOver"></p>
 </div>
+<div class="choiceImages">
+    <img id="playerChoice">
+    <img id="computerChoice">
+</div>
 
+
+<div id="roundResults">
+</div>
+
+</center>
 <script>
 /// Rock-Paper-Scissors console game created by Anna J McDougall
 /// as part of The Odin Project curriculum Web Development 101
@@ -44,7 +62,7 @@ let totalRoundCount = 0;
 /// DOM elements
 const roundResults = document.querySelector('#roundResults');
 const finalResults = document.querySelector('#finalResults');
-
+const buttons = document.querySelectorAll("button");
 
 
 
@@ -62,7 +80,12 @@ function capitalise(word) {
 
 /// Function to define the round results and message
 function playRound(computerSelection, playerSelection) {
-
+    if (computerSelection == "rock") document.getElementById("computerChoice").src = "images/rock.jpg"
+    if (computerSelection == "scissors") document.getElementById("computerChoice").src = "images/scissors.jpg"
+    if (computerSelection == "paper") document.getElementById("computerChoice").src = "images/paper.jpg"
+    if (playerSelection == "rock") document.getElementById("playerChoice").src = "images/rock.jpg"
+    if (playerSelection == "scissors") document.getElementById("playerChoice").src = "images/scissors.jpg"
+    if (playerSelection == "paper") document.getElementById("playerChoice").src = "images/paper.jpg"
     if (computerSelection == playerSelection) {
         result = "It's a tie!";
     } else if (computerSelection == "rock") {
@@ -93,50 +116,57 @@ function playRound(computerSelection, playerSelection) {
         result = "Oops something went wrong";
     } 
     return result }
-    
+
 function updateResults() {
     if (totalRoundCount < 5) {
-    ++totalRoundCount
+        ++totalRoundCount
 
-    if (result.search("win") != -1) {
+        const newID = "round" + totalRoundCount + "Results";
+        const div = document.createElement('div');
+        div.setAttribute("id", newID);
+
+        if (result.search("win") != -1) {
             ++playerScore 
-    } else if (result.search("tie") != -1) {
-        ++tieScore 
-    } else {
-        ++computerScore
-    }
-   
-    const newID = "round" + totalRoundCount + "Results";
-    const para = document.createElement('p');
-
-    para.setAttribute("id", newID);
-    para.textContent = `${result}
-    Player score: ${playerScore}
-    Computer score: ${computerScore}
-    Tied rounds: ${tieScore}`
-    roundResults.appendChild(para); 
-
-        if (totalRoundCount === 5 || playerScore === 3 || computerScore === 3) {{
-            finalScore = `GAME OVER
-            Your Score: ${playerScore}
-            Computer Score: ${computerScore}
-            Tied Rounds: ${tieScore}`
-            let resultMessage
-        
-            if (playerScore === computerScore) {
-                resultMessage = "It's a tie!"
-            } else if (playerScore > computerScore) {
-                resultMessage = "You win!"
-            } else {
-                resultMessage = "Computer wins!"
+            div.setAttribute("style", "background-color: mediumseagreen")
+        } else if (result.search("tie") != -1) {
+            ++tieScore 
+            div.setAttribute("style", "background-color: burlywood")
+        } else {
+            ++computerScore
+            div.setAttribute("style", "background-color: crimson")
         }
-            const finalScoreDisplay = document.getElementById("gameOver")
-            finalScoreDisplay.textContent = `${finalScore} ${resultMessage}`;
-            finalResults.appendChild(finalScoreDisplay);
-    }
-}
+
+        div.textContent = `ROUND ${totalRoundCount}
+            ${result}
+            Player score: ${playerScore}
+            Computer score: ${computerScore}
+            Tied rounds: ${tieScore}` 
+        roundResults.appendChild(div); 
+
+            if (totalRoundCount === 5 || playerScore === 3 || computerScore === 3) {
+                finalScore = `GAME OVER
+                Your Score: ${playerScore}
+                Computer Score: ${computerScore}
+                Tied Rounds: ${tieScore}`
+                let resultMessage
+            
+                if (playerScore === computerScore) {
+                    resultMessage = "It's a tie!"
+                } else if (playerScore > computerScore) {
+                    resultMessage = "You win!"
+                } else {
+                    resultMessage = "Computer wins!"
+                }
+                const finalScoreDisplay = document.getElementById("gameOver")
+                finalScoreDisplay.textContent = `${finalScore} ${resultMessage}`;
+                finalResults.appendChild(finalScoreDisplay);
+
+                document.getElementById("buttonContainer").style.display="none";
+
+            }
     } 
 }
+
 
 
 
@@ -148,15 +178,16 @@ function displayResult() {
     return bestOfFiveResult
 }
 
-const buttons = document.querySelectorAll("button");
-    buttons.forEach((button) => {
-    button.addEventListener('click', (e) => {
-        playerSelection = button.id;
-        computerSelection = computerPlay();
-        playRound(computerSelection, playerSelection)
-        updateResults();
-        })
-    });
+/// Defines button onclick events
+
+buttons.forEach((button) => {
+button.addEventListener('click', (e) => {
+    playerSelection = button.id;
+    computerSelection = computerPlay();
+    playRound(computerSelection, playerSelection)
+    updateResults();
+    })
+});
 
 
 
